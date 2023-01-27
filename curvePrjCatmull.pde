@@ -7,6 +7,12 @@ int frame = 500;
 int count = 0;
 int conCount = 0;
 boolean control = false;
+ArrayList points;
+float minDistance = 20;
+float xMax = 570;
+float yMax = 375;
+float xMin = 30;
+float yMin = 25;
 
 void setup() {
   size(600, 400);
@@ -16,9 +22,26 @@ void setup() {
   Xp = new float[numPoints];
   Yp = new float[numPoints];
   //randomSeed(10);
-  for (int i = 0; i< numPoints; i++){
-    Xp[i] = random(30, 570);
-    Yp[i] = random(25, 370); 
+  points = new ArrayList();
+  while (points.size() < numPoints) {
+    PVector newPoint = new PVector(random(xMin, xMax), random(yMin, yMax));
+    boolean isValid = true;
+    for (int i = 0; i < points.size(); i++) {
+      PVector oldPoint = (PVector) points.get(i);
+      float distance = dist(newPoint.x, newPoint.y, oldPoint.x, oldPoint.y);
+      if (distance < minDistance) {
+        isValid = false;
+        break;
+      }
+    }
+    if (isValid) {
+      points.add(newPoint);
+    }
+  }
+  for(int i = 0; i<numPoints; i++) {
+    PVector point = (PVector) points.get(i);
+    Xp[i] = point.x;
+    Yp[i] = point.y;
   }
 }
 
