@@ -8,7 +8,7 @@ int count = 0;
 int conCount = 0;
 boolean control = false;
 ArrayList points;
-float minDistance = 20;
+float minDistance = 30;
 float xMax = 570;
 float yMax = 375;
 float xMin = 30;
@@ -29,7 +29,9 @@ void setup() {
     for (int i = 0; i < points.size(); i++) {
       PVector oldPoint = (PVector) points.get(i);
       float distance = dist(newPoint.x, newPoint.y, oldPoint.x, oldPoint.y);
-      if (distance < minDistance) {
+      if (  distance < minDistance && 
+          newPoint.x < 60          &&
+          newPoint.y < 60) {
         isValid = false;
         break;
       }
@@ -111,8 +113,12 @@ void catmullDraw() {
   
   noFill();
   
-  for (int i = 0; i < numPoints; i ++) {
-  ellipse(Xp[i], Yp[i], 20, 20);
+  if(control) {
+    drawCatControl();
+  }else{
+    fill(0);
+    rect(0, 25, 50, 25);
+    noFill();
   }
   float tightness = map(sin(frameCount*.03)*(frameCount *0.5), -1, 1, -2, 5);
   //float tightness = 0;   // float = 0
@@ -178,4 +184,14 @@ void drawControl() {
       line(Xp[p3], Yp[p3], Xp[p2], Yp[p2]);
     stroke(0);
   }
+}
+
+void drawCatControl() {
+  fill(30, 150, 20);
+  rect(0, 25, 50, 25);
+  noFill();
+    for (int i = 0; i < numPoints; i ++) {
+  ellipse(Xp[i], Yp[i], 20, 20);
+  }
+  
 }
